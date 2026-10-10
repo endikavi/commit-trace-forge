@@ -1,0 +1,60 @@
+{
+  "name": "commit-trace-forge",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Turn real git history into verified agentic coding tasks: teacher trajectories for SFT/distillation and reward-scored environments for RL, executed for real in containers.",
+  "license": "MIT",
+  "keywords": [
+    "llm",
+    "agents",
+    "coding-agent",
+    "dataset",
+    "synthetic-data",
+    "sft",
+    "distillation",
+    "reinforcement-learning",
+    "rlvr",
+    "llm-as-a-judge",
+    "swe"
+  ],
+  "homepage": "https://github.com/endikavi/commit-trace-forge#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/endikavi/commit-trace-forge.git"
+  },
+  "bugs": {
+    "url": "https://github.com/endikavi/commit-trace-forge/issues"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "packageManager": "pnpm@12.4.1",
+  "bin": {
+    "forge": "./dist/cli/main.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "forge": "node --experimental-strip-types --no-warnings=ExperimentalWarning src/cli/main.ts",
+    "test": "vitest run",
+    "test:unit": "vitest run test/unit",
+    "test:integration": "vitest run test/integration",
+    "fixture": "node --experimental-strip-types --no-warnings=ExperimentalWarning test/fixtures/build-fixture.ts",
+    "smoke:pi": "node --experimental-strip-types --no-warnings=ExperimentalWarning test/smoke-pi.ts",
+    "check": "pnpm typecheck && pnpm test:unit"
+  },
+  "dependencies": {
+    "@earendil-works/pi-coding-agent": "0.85.1",
+    "ignore": "7.0.5",
+    "minimatch": "10.2.5",
+    "typebox": "1.3.7",
+    "yaml": "2.9.0",
+    "zod": "4.1.12"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "typescript": "5.9.3",
+    "vitest": "4.1.9"
+  }
+}

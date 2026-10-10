@@ -1,0 +1,8 @@
+# pnpm >= 10 reads build-script policy from here.
+# esbuild ships the prebuilt binary vitest needs.
+# @google/genai and protobufjs are transitive optional deps of the pi SDK; their
+# build scripts are not needed by this tool.
+allowBuilds:
+  '@google/genai': false
+  esbuild: true
+  protobufjs: false

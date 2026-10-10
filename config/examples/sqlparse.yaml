@@ -1,0 +1,69 @@
+# Example: andialbrecht/sqlparse
+#
+# A non-validating SQL parser: lexer, token grouping, formatting. Pure Python, hatchling build with
+# the version read from the package, no runtime dependencies, a fast pytest suite. Commits are
+# typically a grouping or lexer fix plus a regression test — tasks that force the agent to read an
+# unfamiliar token pipeline before touching it.
+#
+#   pnpm forge run --config config/examples/sqlparse.yaml
+#
+# See xmltodict.yaml for FORGE_MODEL and FORGE_DOCKER_COMMAND.
+
+schema_version: 1
+seed: 11
+workspace: ../../.forge-examples/sqlparse
+
+repositories:
+  - url: https://github.com/andialbrecht/sqlparse
+    ref: 60cdc649726bf1bc4f1b336050560b336da715ec
+    family: sqlparse
+    ecosystem: python
+    license: BSD-3-Clause
+
+sampling:
+  target_samples: 5
+  max_candidates: 60
+
+filters:
+  changed_lines: { min: 8, max: 200 }
+  changed_files: { min: 2, max: 6 }
+  since: "2023-01-01T00:00:00Z"
+  exclude_path_globs: ["CHANGELOG", "AUTHORS", "docs/**", ".github/**", "*.md"]
+
+grading:
+  min_score: 65
+
+generation:
+  max_solver_attempts: 2
+  max_user_questions: 2
+  max_agent_turns: 50
+
+verification:
+  acceptance_mode: either
+  replay_required: true
+  clean_runs: 2
+
+sandbox:
+  memory_mb: 2048
+  task_timeout_seconds: 1200
+  command_timeout_seconds: 240
+
+model:
+  provider: anthropic
+  model: claude-sonnet-4-5
+  thinking: "off"
+
+budgets:
+  max_total_tokens: 4000000
+  max_total_cost_usd: 30
+  max_parallel_tasks: 2
+  max_prepared_candidates: 20
+
+export:
+  formats: [jsonl, conversations, openai_chat, rl_tasks]
+
+cleanup:
+  task_images: never
+
+rl:
+  rollouts_per_task: 4

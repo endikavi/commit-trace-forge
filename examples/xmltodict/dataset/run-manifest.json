@@ -1,0 +1,57 @@
+{
+  "run_id": "run_3039b6cc25641ffd",
+  "config_hash": "sha256:8443751e10891f10bc00dd067ed75f91f26c25086dc102ed6ab7fa4993f1c98e",
+  "config_path": "config/examples/xmltodict.yaml",
+  "prompts": {
+    "grader": {
+      "version": "v1",
+      "hash": "sha256:e68db254e7764e183f3dc0c072462be687d8ff3ec84703425c7a4b8cac521e59"
+    },
+    "taskgen": {
+      "version": "v1",
+      "hash": "sha256:602c76866e58a3dd1506ab1dbbd5e002af13c25a6936558bc81e5c233af5b1ee"
+    },
+    "taskreview": {
+      "version": "v1",
+      "hash": "sha256:e8c2836715850a2d1080a3f67c7d5fe1989f30b0c6d465b634fc7bd34e882c64"
+    },
+    "solver": {
+      "version": "v1",
+      "hash": "sha256:f20e72c0e213d842141a601302757055ca7afb27e50a84e6430602542793f0d1"
+    },
+    "user_simulator": {
+      "version": "v1",
+      "hash": "sha256:63bf26b3dec1bce1538f66fb3b00745e2b17118ac59b673b9aebaf568a245271"
+    },
+    "judge": {
+      "version": "v1",
+      "hash": "sha256:cd2a6440a48a33e13a7ec97a60de1ca93dbfddda763e153285eb1ff07f9b81b0"
+    }
+  },
+  "sandbox_backend": "docker",
+  "sandbox_isolation_notes": [
+    "Containers run as a non-root uid:gid with all Linux capabilities dropped and no-new-privileges set.",
+    "No host path, docker socket, credential file or shared writable cache is mounted; files move over tar streams.",
+    "CPU, memory, swap and PID limits are applied; the solve phase runs with --network none by default.",
+    "This is configured isolation, not a guarantee against hostile code: container escapes, kernel bugs and resource-exhaustion attacks remain possible. Run untrusted repositories on a disposable host."
+  ],
+  "harness": "pi@0.85.1",
+  "splits": {
+    "train": 3,
+    "validation": 0,
+    "test": 0
+  },
+  "realised_split_fractions": {
+    "train": 1,
+    "validation": 0,
+    "test": 0
+  },
+  "groups_per_split": {
+    "train": [
+      "xmltodict"
+    ],
+    "validation": [],
+    "test": []
+  },
+  "exported_at": "2026-10-10T23:10:56.815Z"
+}

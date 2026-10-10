@@ -1,0 +1,9 @@
+{
+  "tasks": 3,
+  "rollouts": 6,
+  "mean_reward": 0.8218,
+  "pass_rate": 0.8333,
+  "pass_at_k": 1,
+  "k": 2,
+  "preference_pairs": 1
+}

@@ -1,0 +1,99 @@
+# Example: three small pure-Python libraries in one run
+#
+# xmltodict, sqlparse and tomli together. Each is its own repository family, so train, validation
+# and test splits fall along repository lines and no project appears on both sides of a boundary.
+# A good default for a first teacher -> student or RL experiment.
+#
+#   pnpm forge run     --config config/examples/python-starter.yaml
+#   pnpm forge judge   --config config/examples/python-starter.yaml
+#   pnpm forge export  --config config/examples/python-starter.yaml
+#   pnpm forge rollout --config config/examples/python-starter.yaml --split test
+#
+# See xmltodict.yaml for FORGE_MODEL and FORGE_DOCKER_COMMAND.
+
+schema_version: 1
+seed: 42
+workspace: ../../.forge-examples/python-starter
+
+repositories:
+  - url: https://github.com/martinblech/xmltodict
+    ref: 6e29fba282e68631034dd2722a413b4e35276584
+    family: xmltodict
+    ecosystem: python
+    license: MIT
+    max_samples: 6
+  - url: https://github.com/andialbrecht/sqlparse
+    ref: 60cdc649726bf1bc4f1b336050560b336da715ec
+    family: sqlparse
+    ecosystem: python
+    license: BSD-3-Clause
+    max_samples: 6
+    filters:
+      exclude_path_globs: ["CHANGELOG", "AUTHORS", "docs/**", ".github/**", "*.md"]
+  - url: https://github.com/hukkin/tomli
+    ref: 43a86ade8b795c6ef9b4ec53372a607cd1ed426f
+    family: tomli
+    ecosystem: python
+    license: MIT
+    max_samples: 6
+    filters:
+      since: "2022-01-01T00:00:00Z"
+      exclude_path_globs: ["CHANGELOG.md", "README.md", "benchmark/**", "fuzzer/**", "profiler/**", ".github/**"]
+
+sampling:
+  target_samples: 15
+  max_candidates: 150
+  strategy: uniform_by_repo_then_commit
+
+filters:
+  changed_lines: { min: 8, max: 200 }
+  changed_files: { min: 2, max: 6 }
+  since: "2023-01-01T00:00:00Z"
+  exclude_path_globs: ["*.md", "docs/**", ".github/**"]
+
+grading:
+  min_score: 65
+
+generation:
+  max_solver_attempts: 2
+  max_user_questions: 2
+  max_agent_turns: 50
+
+verification:
+  acceptance_mode: either
+  replay_required: true
+  clean_runs: 2
+
+sandbox:
+  memory_mb: 2048
+  task_timeout_seconds: 1200
+  command_timeout_seconds: 240
+
+model:
+  # The teacher. Every other role falls back to it unless overridden below.
+  provider: anthropic
+  model: claude-sonnet-4-5
+  thinking: "off"
+  # Per-role overrides. `policy` is the model under training or evaluation in `forge rollout`
+  # (defaults to the solver); a judge from a different model family reduces self-preference bias.
+  #   roles:
+  #     policy: { provider: my-endpoint, model: my-student-model }
+  #     judge:  { provider: openai, model: gpt-5 }
+  roles: {}
+
+budgets:
+  max_total_tokens: 10000000
+  max_total_cost_usd: 80
+  max_parallel_tasks: 2
+  max_prepared_candidates: 45
+
+export:
+  formats: [jsonl, conversations, openai_chat, rl_tasks]
+  splits: { train: 0.67, validation: 0.0, test: 0.33 }
+
+cleanup:
+  task_images: never
+
+rl:
+  rollouts_per_task: 4
+  preference_margin: 0.3

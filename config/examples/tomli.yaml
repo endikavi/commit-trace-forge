@@ -1,0 +1,68 @@
+# Example: hukkin/tomli
+#
+# The TOML parser that became the standard library's `tomllib`. Pure Python, flit build, zero
+# dependencies, a unittest suite that pytest runs as-is. Changes are spec-driven — escapes,
+# datetimes, error messages — so a task is precise and its tests are unambiguous.
+#
+#   pnpm forge run --config config/examples/tomli.yaml
+#
+# See xmltodict.yaml for FORGE_MODEL and FORGE_DOCKER_COMMAND.
+
+schema_version: 1
+seed: 13
+workspace: ../../.forge-examples/tomli
+
+repositories:
+  - url: https://github.com/hukkin/tomli
+    ref: 43a86ade8b795c6ef9b4ec53372a607cd1ed426f
+    family: tomli
+    ecosystem: python
+    license: MIT
+
+sampling:
+  target_samples: 5
+  max_candidates: 40
+
+filters:
+  changed_lines: { min: 8, max: 250 }
+  changed_files: { min: 2, max: 8 }
+  since: "2022-01-01T00:00:00Z"
+  exclude_path_globs: ["CHANGELOG.md", "README.md", "benchmark/**", "fuzzer/**", "profiler/**", ".github/**"]
+
+grading:
+  min_score: 65
+
+generation:
+  max_solver_attempts: 2
+  max_user_questions: 2
+  max_agent_turns: 40
+
+verification:
+  acceptance_mode: either
+  replay_required: true
+  clean_runs: 2
+
+sandbox:
+  memory_mb: 2048
+  task_timeout_seconds: 900
+  command_timeout_seconds: 180
+
+model:
+  provider: anthropic
+  model: claude-sonnet-4-5
+  thinking: "off"
+
+budgets:
+  max_total_tokens: 3000000
+  max_total_cost_usd: 20
+  max_parallel_tasks: 2
+  max_prepared_candidates: 15
+
+export:
+  formats: [jsonl, conversations, openai_chat, rl_tasks]
+
+cleanup:
+  task_images: never
+
+rl:
+  rollouts_per_task: 4

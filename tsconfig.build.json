@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // Emit only the library, rooted at src, so the compiled CLI lands at dist/cli/main.js and
+    // the paths it resolves relative to itself (prompts/, config/) still reach the repository root.
+    "rootDir": "src",
+    "noEmit": false,
+    "declaration": false
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["dist", "node_modules", "test"]
+}

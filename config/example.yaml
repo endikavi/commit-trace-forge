@@ -1,0 +1,321 @@
+# commit-trace-forge configuration
+#
+# Every field below is documented in docs/config.md with its units and its interactions.
+# Validated with Zod at load time: an unknown or malformed field stops the run before any work.
+
+schema_version: 1
+
+# Seed for every sampling and tie-breaking decision.
+# The same seed reproduces the same draw ONLY over the same population. Upstream history moves,
+# so `forge mine` always writes a population manifest; that manifest is what makes an earlier
+# draw repeatable.
+seed: 42
+
+# Directory holding the SQLite database, content-addressed artifacts, mirror clones, manifests
+# and exports. Relative paths resolve against this file.
+workspace: .forge
+
+repositories:
+  - url: https://github.com/OWNER/REPO.git
+    # Branch, tag or SHA. Resolved to a fixed commit SHA once, when the run starts.
+    ref: main
+    # Upper bound on ACCEPTED samples from this repository.
+    # sampling.target_samples is the global ceiling; whichever binds first wins.
+    max_samples: 20
+    # Grouping key for splits and deduplication. Forks of one project should share it so their
+    # samples cannot land on both sides of a train/test boundary. Defaults to the repo name.
+    # family: repo
+    # "auto" detects the ecosystem from the repository contents at each candidate's parent.
+    # The MVP supports "python" (pytest) and "node" (JS/TS with a declared test command).
+    ecosystem: auto
+    # Per-repository overrides, merged over the global `filters` block below.
+    # filters:
+    #   changed_lines: { min: 20, max: 200 }
+    #   exclude_path_globs: ["docs/**"]
+    # Per-repository environment overrides. Required for JS/TS projects whose `npm test` script
+    # is unusable, and for any project needing extra install steps.
+    # environment:
+    #   base_image: python:3.11-slim
+    #   setup_commands: ["python -m pip install --no-cache-dir -e .[test]"]
+    #   test_command: ["python", "-m", "pytest", "-q", "--junit-xml=/tmp/forge-report/junit.xml"]
+    #   test_selection_command: ["python", "-m", "pytest", "-q", "--junit-xml=/tmp/forge-report/junit.xml", "{tests}"]
+    #   workdir: /workspace
+    #   env: { PYTHONHASHSEED: "0" }
+    # SPDX id when you already know it. Leave unset to let detection run; an unidentified
+    # license is flagged pending review rather than silently accepted.
+    # license: MIT
+
+sampling:
+  # ACCEPTED samples wanted. Not commits inspected: most candidates die in environment
+  # preparation, grading or verification. If the budget or the eligible population runs out
+  # first, the run reports the number reached and the reason for the shortfall.
+  target_samples: 100
+  # "global": target_samples across all repositories.
+  # "per_repository": target_samples for each repository.
+  target_scope: global
+  # Hard cap on how many commits enter the candidate pool.
+  max_candidates: 2000
+  # uniform_by_repo_then_commit: pick a repository uniformly, then a commit inside it. Small
+  #   repositories are not drowned out by large ones.
+  # uniform_over_eligible_commits: one flat draw over every eligible commit. Repositories with
+  #   more eligible history contribute proportionally more.
+  strategy: uniform_by_repo_then_commit
+  without_replacement: true
+
+# Deterministic screening. Runs before any model call, so it is free.
+filters:
+  # added + deleted lines on text hunks. Binary entries contribute 0 here but are counted
+  # separately and rejected by exclude_binary_changes, never read as "no change".
+  changed_lines: { min: 10, max: 300 }
+  # Optional separate limits, applied in addition to changed_lines.
+  # added_lines: { min: 5, max: 250 }
+  # deleted_lines: { max: 150 }
+  changed_files: { min: 1, max: 8 }
+  # How a rename contributes to changed_files: "one_entry" (git's own accounting) or
+  # "two_entries" (a delete plus an add).
+  rename_counts_as: one_entry
+  # Rename similarity threshold passed to git as -M<n>%.
+  rename_similarity: 50
+
+  exclude_merges: true
+  exclude_root_commits: true
+  exclude_binary_changes: true
+  exclude_submodule_changes: true
+  exclude_symlink_changes: false
+  exclude_generated_only: true
+  exclude_vendored_only: true
+  exclude_formatting_only: true
+  # Rejects commits whose changes are ONLY lockfiles. A lockfile touched alongside real source
+  # changes is kept: it is often required for a valid dependency-changing task.
+  exclude_lockfile_only: true
+
+  # Classification rules. Minimatch syntax, '/'-separated.
+  generated_globs:
+    - "**/*.min.js"
+    - "**/*_pb2.py"
+    - "**/generated/**"
+    - "**/dist/**"
+  vendored_globs:
+    - "**/vendor/**"
+    - "**/third_party/**"
+    - "**/node_modules/**"
+  lockfile_globs:
+    - "**/package-lock.json"
+    - "**/pnpm-lock.yaml"
+    - "**/poetry.lock"
+    - "**/requirements*.txt"
+
+  # Removed from the diff before the filtered metrics are computed. Raw metrics are stored too,
+  # so a rejection can be explained against both views.
+  exclude_path_globs: []
+  # Only commits touching at least one of these are eligible. Empty means no restriction.
+  include_path_globs: []
+
+  # Inclusive ISO-8601 bounds on the commit's author date.
+  # since: "2023-01-01T00:00:00Z"
+  # until: "2025-01-01T00:00:00Z"
+
+  # Rejects a commit that adds a path the parent's .gitignore would ignore. Such a path could
+  # never be staged by the solver, which would look like an incorrect solution.
+  exclude_target_gitignored_paths: true
+
+grading:
+  # Weighted 0-100 total required to proceed.
+  min_score: 80
+  # Per-dimension minimums on the raw 0-5 scale. A single dimension below its minimum rejects
+  # the candidate regardless of the total.
+  min_task_clarity: 3
+  min_testability: 3
+  min_context_independence: 3
+  min_change_coherence: 3
+  min_training_value: 2
+  min_environment_reproducibility: 3
+  # Must sum to 1.
+  weights:
+    task_clarity: 0.20
+    testability: 0.25
+    context_independence: 0.20
+    change_coherence: 0.15
+    training_value: 0.10
+    environment_reproducibility: 0.10
+
+generation:
+  # Only English is supported for synthetic text. Real tool output is never translated.
+  language: en
+  task_variants: 1
+  # Retries of the solver. Each attempt starts from a clean container; no attempt ever receives
+  # the target diff or hidden-test feedback.
+  max_solver_attempts: 2
+  # 0 disables the ask_user tool entirely.
+  max_user_questions: 2
+  # Emit short, validated decision summaries (30-90 words) alongside actions.
+  # These are not chain-of-thought and are never requested as such.
+  decision_summaries: true
+  max_agent_turns: 60
+
+verification:
+  # exact_tree: only a byte-identical versioned tree is accepted
+  # behavioral: only the behavioural checks are required
+  # either:     accept when either holds
+  acceptance_mode: exact_tree
+  replay_required: true
+  # Independent clean runs of the reference suite over the solution. Each starts a fresh
+  # container; a suite that only passes sometimes is not evidence.
+  clean_runs: 2
+  # Strict MVP: a parent baseline with pre-existing failures rejects the candidate.
+  strict_baseline: true
+  # Require a check that fails at the parent and passes at the target. Refactors are exempt:
+  # they are judged on behaviour preservation plus a structural objective instead.
+  require_fail_to_pass: true
+
+sandbox:
+  # "docker" is the real isolation boundary. "local" runs subprocesses on the host with NO
+  # isolation and exists only to exercise the pipeline where no container runtime is available.
+  backend: docker
+  # Argv prefix that reaches the docker CLI. On a Windows host whose daemon lives inside WSL:
+  #   docker_command: ["wsl", "-d", "Ubuntu", "-e", "docker"]
+  docker_command: ["docker"]
+  # Network policy while the solver runs. Dependency provisioning always gets network; the
+  # provisioned state is then frozen into an image so solving and verification can run offline.
+  network_during_solve: false
+  cpu_limit: 2
+  memory_mb: 4096
+  pids_limit: 256
+  # Wall clock for one task: solve plus verification.
+  task_timeout_seconds: 1200
+  # Wall clock for a single command inside the sandbox.
+  command_timeout_seconds: 300
+  # uid:gid every task command runs as. Must not be root.
+  run_as: "1000:1000"
+  provision_timeout_seconds: 1800
+  # What to do when reaching the target needs dependencies the parent does not declare:
+  #   reject_new                  discard the candidate (strict default)
+  #   offline_store               NOT IMPLEMENTED. Accepted by the schema and rejected at run
+  #                               time with an explicit cause, because provisioning from the
+  #                               parent's manifests and then solving offline would blame the
+  #                               agent for a dependency that was never made available.
+  #   allow_network_during_solve  let the solver reach the network; recorded on the sample.
+  dependency_policy: reject_new
+
+model:
+  # Provider and model as pi resolves them. Custom OpenAI-compatible providers declared in
+  # ~/.pi/agent/models.json work here too. FORGE_MODEL=provider/model overrides this pair
+  # without editing the file.
+  provider: anthropic
+  model: claude-sonnet-4-5
+  # "off" keeps provider reasoning blocks out of the pipeline entirely.
+  thinking: "off"
+  # Override the pi agent directory holding auth.json and models.json.
+  # agent_dir: /home/me/.pi/agent
+  # Per-role overrides. Anything omitted falls back to the block above.
+  #   solver          the teacher whose trajectories become the dataset
+  #   policy          the model trained or evaluated by `forge rollout` (defaults to solver)
+  #   judge           scores trajectories; prefer a different family from the policy
+  #   grader, taskgen, taskreview, user_simulator
+  roles: {}
+  #   solver: { model: claude-opus-4-7, thinking: medium }
+  #   user_simulator: { model: claude-haiku-4-5 }
+  #   policy: { provider: my-endpoint, model: my-student }
+
+budgets:
+  max_total_tokens: 2000000
+  # USD. Only constrains calls whose model has a published price. Calls with an unknown price
+  # are counted and reported, never charged against a guessed number.
+  max_total_cost_usd: 100
+  max_parallel_tasks: 2
+  # Hard cap on candidates taken through environment preparation.
+  # max_prepared_candidates: 500
+  # Wall clock for the whole run. 0 disables.
+  max_wall_clock_seconds: 0
+
+export:
+  # jsonl:         samples.jsonl, canonical records
+  # conversations: conversations.jsonl, provenance-labelled messages with training masks
+  # openai_chat:   sft-openai.jsonl, OpenAI chat format for SFT / distillation
+  # rl_tasks:      rl-tasks.jsonl (policy side) + rl-reward-spec.jsonl (reserved)
+  formats: [jsonl, conversations, openai_chat, rl_tasks]
+  # Splits are assigned per GROUP, never per sample, so variants of one task cannot cross.
+  split_by: repository_family
+  splits: { train: 0.8, validation: 0.1, test: 0.1 }
+  # Include validated decision summaries as assistant targets.
+  include_decision_summaries: true
+  # Post-hoc annotations are never training targets; this only controls their presence.
+  include_posthoc_annotations: false
+  # Repository URLs or families known to appear in public benchmarks. Removing what this names
+  # is not a guarantee that the dataset is free of evaluation contamination.
+  benchmark_exclusion_list: []
+  # SPDX ids allowed for export. Empty allows anything positively detected.
+  allowed_licenses: []
+  # What to do with a repository whose license could not be identified.
+  unknown_license_policy: pending_review
+  # exclude: drop samples with a detection hit.
+  # redact:  rewrite them. Redaction changes real tool output, so the sample stops being a
+  #          faithful record and is dropped anyway; this is reported explicitly.
+  secret_policy: exclude
+  # Allow exporting trajectories produced by the scripted fixture harness instead of a real
+  # model. Off by default. A scripted trajectory is never shipped as a verified model run.
+  allow_fixture_provenance: false
+
+cleanup:
+  # A run creates one container per phase and one committed image per (repository, parent
+  # revision). Nothing reclaims them automatically, so a hundred candidates leaves a hundred
+  # multi-hundred-megabyte images for repositories that will never be touched again.
+  #
+  # The defaults keep exactly the dataset and the evidence for it: the exported JSONL, the run
+  # manifest, the run database (population, rejections with causes, usage ledger) and the command
+  # logs. Everything reconstructible is removed.
+  #
+  # Trade-off: with task_images = after_repository, `forge replay --sample` cannot start
+  # immediately, because the image it would start from is gone. `forge prepare` rebuilds it.
+  # Use "never" to keep replay instant, at the cost of disk.
+  task_images: after_repository      # after_repository | after_run | never
+  runtime_images: after_run          # after_run | never
+  repository_mirrors: after_run      # after_repository | after_run | never
+  # One tar of the whole workspace per accepted attempt; the largest artifact class. The solution
+  # PATCH is always kept, so the change itself stays inspectable.
+  solution_snapshots: after_export   # after_export | never
+  # Sweeps containers this tool labelled, including ones an interrupted run left behind.
+  containers: always                 # always | never
+  # Also drop pulled base images (python:3.12-slim and friends). Off by default: they are shared
+  # and expensive to re-pull.
+  base_images: never                 # after_run | never
+
+# ---------------------------------------------------------------------------------------------
+# Judging, rewards and rollouts. See docs/training.md.
+# ---------------------------------------------------------------------------------------------
+
+judge:
+  # Show the judge the historical patch. Off: the hidden tests already establish correctness,
+  # and a judge anchored on one solution tends to penalise valid alternatives.
+  show_reference_patch: false
+  max_trajectory_chars: 60000
+  max_diff_chars: 30000
+  # Rubric weights (prompts/judge/v1.md). Must sum to 1.
+  weights:
+    requirement_coverage: 0.3
+    solution_quality: 0.25
+    verification_discipline: 0.15
+    scope_discipline: 0.1
+    communication_honesty: 0.1
+    efficiency: 0.1
+
+reward:
+  # reward = verifiable_weight * tests + judge_weight * judge, and the judge only counts when the
+  # hidden tests pass: it can refine a correct solution's reward, never rescue a wrong one.
+  verifiable_weight: 0.7
+  judge_weight: 0.3
+  # Up to 0.5 of the verifiable component for a share of fail-to-pass checks (no regressions).
+  partial_credit: false
+  zero_on_incomplete: true
+  zero_on_deleted_tests: true
+  zero_on_reward_hacking: true
+  cap_on_unsupported_claims: 0.5
+
+rl:
+  # Rollouts per task for `forge rollout`. Several per task give group-relative advantages and pass@k.
+  rollouts_per_task: 4
+  # Restrict rollouts to these splits (assigned by `forge export`). Empty = all.
+  splits: []
+  judge_rollouts: true
+  # Minimum best-minus-worst reward gap before a task yields a preference pair.
+  preference_margin: 0.3

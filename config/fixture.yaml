@@ -1,0 +1,135 @@
+# Reproducible walkthrough configuration.
+#
+# Points at the deterministic fixture repository built by `pnpm fixture`. Its history contains
+# usable commits AND one instance of every rejection class, so a run over it exercises the whole
+# pipeline, including the paths that discard work.
+#
+# Build the fixture first:
+#   pnpm fixture
+#
+# Then:
+#   pnpm forge doctor --config config/fixture.yaml
+#   pnpm forge run    --config config/fixture.yaml
+
+schema_version: 1
+seed: 42
+workspace: ../.forge-fixture
+
+repositories:
+  - url: ../test/fixtures/repo
+    ref: main
+    family: calcstats-fixture
+    ecosystem: python
+    license: MIT
+
+sampling:
+  target_samples: 3
+  target_scope: global
+  max_candidates: 50
+  strategy: uniform_by_repo_then_commit
+  without_replacement: true
+
+filters:
+  changed_lines: { min: 10, max: 300 }
+  changed_files: { min: 1, max: 8 }
+  exclude_merges: true
+  exclude_root_commits: true
+  exclude_binary_changes: true
+  exclude_generated_only: true
+  exclude_formatting_only: true
+  exclude_lockfile_only: true
+  lockfile_globs:
+    - "**/poetry.lock"
+    - "**/requirements*.txt"
+
+grading:
+  min_score: 65
+  min_task_clarity: 3
+  min_testability: 3
+  min_context_independence: 3
+  min_change_coherence: 3
+  min_training_value: 1
+  min_environment_reproducibility: 3
+
+generation:
+  language: en
+  task_variants: 1
+  max_solver_attempts: 2
+  max_user_questions: 2
+  decision_summaries: true
+  max_agent_turns: 40
+
+verification:
+  # "either" so the walkthrough accepts a functionally correct solution that is not byte-identical
+  # to the historical patch, and records which of the two modalities was satisfied.
+  acceptance_mode: either
+  replay_required: true
+  clean_runs: 2
+  strict_baseline: true
+  require_fail_to_pass: true
+
+sandbox:
+  backend: docker
+  # On Windows with the daemon inside WSL, leave this alone and export
+  # FORGE_DOCKER_COMMAND="wsl -d Ubuntu -e docker" instead.
+  docker_command: ["docker"]
+  network_during_solve: false
+  cpu_limit: 2
+  memory_mb: 2048
+  pids_limit: 256
+  task_timeout_seconds: 900
+  command_timeout_seconds: 180
+  run_as: "1000:1000"
+  provision_timeout_seconds: 1800
+  dependency_policy: reject_new  # reject_new | allow_network_during_solve  (offline_store is not implemented)
+
+model:
+  # Any pi provider/model. To use a self-hosted OpenAI-compatible endpoint, declare it in
+  # ~/.pi/agent/models.json (see docs/pi-adapter.md) and export FORGE_MODEL=<provider>/<model>.
+  provider: anthropic
+  model: claude-sonnet-4-5
+  thinking: "off"
+  roles: {}
+
+budgets:
+  max_total_tokens: 2000000
+  max_total_cost_usd: 100
+  max_parallel_tasks: 1
+  max_prepared_candidates: 12
+  max_wall_clock_seconds: 0
+
+export:
+  formats: [jsonl, conversations]
+  split_by: repository_family
+  splits: { train: 0.8, validation: 0.1, test: 0.1 }
+  include_decision_summaries: true
+  include_posthoc_annotations: false
+  benchmark_exclusion_list: []
+  allowed_licenses: []
+  unknown_license_policy: pending_review
+  secret_policy: exclude
+  allow_fixture_provenance: false
+
+cleanup:
+  # A run creates one container per phase and one committed image per (repository, parent
+  # revision). Nothing reclaims them automatically, so a hundred candidates leaves a hundred
+  # multi-hundred-megabyte images for repositories that will never be touched again.
+  #
+  # The defaults keep exactly the dataset and the evidence for it: the exported JSONL, the run
+  # manifest, the run database (population, rejections with causes, usage ledger) and the command
+  # logs. Everything reconstructible is removed.
+  #
+  # Trade-off: with task_images = after_repository, `forge replay --sample` cannot start
+  # immediately, because the image it would start from is gone. `forge prepare` rebuilds it.
+  # Use "never" to keep replay instant, at the cost of disk.
+  task_images: after_repository      # after_repository | after_run | never
+  runtime_images: after_run          # after_run | never
+  repository_mirrors: after_run      # after_repository | after_run | never
+  # One tar of the whole workspace per accepted attempt; the largest artifact class. The solution
+  # PATCH is always kept, so the change itself stays inspectable.
+  solution_snapshots: after_export   # after_export | never
+  # Sweeps containers this tool labelled, including ones an interrupted run left behind.
+  containers: always                 # always | never
+  # Also drop pulled base images (python:3.12-slim and friends). Off by default: they are shared
+  # and expensive to re-pull.
+  base_images: never                 # after_run | never

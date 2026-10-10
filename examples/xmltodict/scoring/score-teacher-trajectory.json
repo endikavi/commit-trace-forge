@@ -1,0 +1,904 @@
+{
+  "schema_version": "commit-trace-forge/1",
+  "rollout_id": "rollout_c7b4ffac60bcc6f7",
+  "task_id": "sample_93018156077f8355",
+  "group_id": "group_fb7a06b8875d0882",
+  "index": 0,
+  "run_id": "run_3039b6cc25641ffd",
+  "split": "train",
+  "source": "external",
+  "policy_model": "teacher-trajectory",
+  "outcome": "completed",
+  "result_tree_sha": "9263dd7a53945594c80d8efd107dce97e1df90bc",
+  "solution_patch_artifact": "sha256:042759f12a33f13597991e0e5f2dfb774915c1dfae45d80854773e635c89d1ff",
+  "verifiable": {
+    "tests_passed": true,
+    "fail_to_pass_satisfied": 2,
+    "fail_to_pass_total": 2,
+    "regressions": 0,
+    "visible_tests_tampered": true,
+    "visible_tests_deleted": false,
+    "exact_tree_match": false,
+    "agent_completed": true
+  },
+  "behavioral": {
+    "fail_to_pass_run": {
+      "label": "solution_fail_to_pass",
+      "command": {
+        "label": "solution_fail_to_pass",
+        "argv": [
+          "python",
+          "-m",
+          "pytest",
+          "-p",
+          "no:cacheprovider",
+          "-q",
+          "--junit-xml=/tmp/forge-report/junit.xml",
+          "tests/test_xmltodict.py"
+        ],
+        "exit_code": 0,
+        "duration_ms": 1225,
+        "timed_out": false,
+        "log_artifact": "sha256:7bf17eee706feba57f25095cec6281dec873d2a017b5c34c1e6c17085a82a577",
+        "stdout_excerpt": "..............................................                           [100%]\n--------------- generated xml file: /tmp/forge-report/junit.xml ----------------\n46 passed in 0.48s\n",
+        "stderr_excerpt": ""
+      },
+      "outcomes": [
+        {
+          "test_id": "tests.test_xmltodict::test_string_vs_file",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_minimal",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_simple",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_force_cdata",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_selective_force_cdata_tuple",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_selective_force_cdata_single_element",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_selective_force_cdata_empty_tuple",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_selective_force_cdata_callable",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_selective_force_cdata_nested_elements",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_selective_force_cdata_with_attributes",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_selective_force_cdata_backwards_compatibility",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_custom_cdata",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_list",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_attrib",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_skip_attrib",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_custom_attrib",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_attrib_and_cdata",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_semi_structured",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_nested_semi_structured",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_skip_whitespace",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_keep_whitespace",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_streaming",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_streaming_interrupt",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_streaming_generator",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_streaming_returns_none",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_postprocessor",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_postprocessor_attribute",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_postprocessor_skip",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_unicode",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_encoded_string",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_namespace_support",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_namespace_collapse",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_namespace_collapse_all",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_namespace_ignore",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_force_list_basic",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_force_list_callable",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_disable_entities_true_rejects_xmlbomb",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_disable_entities_false_returns_xmlbomb",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_disable_entities_true_rejects_external_dtd",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_disable_entities_true_attempts_external_dtd",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_disable_entities_allows_comments_by_default",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_comments",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_streaming_with_comments_and_attrs",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_streaming_memory_usage",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_streaming_attrs",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_namespace_on_root_without_other_attrs",
+          "status": "passed",
+          "failure_excerpt": null
+        }
+      ],
+      "parsed": true,
+      "collection_errors": [],
+      "totals": {
+        "passed": 46,
+        "failed": 0,
+        "errored": 0,
+        "skipped": 0
+      }
+    },
+    "pass_to_pass_run": {
+      "label": "solution_full_suite",
+      "command": {
+        "label": "solution_full_suite",
+        "argv": [
+          "python",
+          "-m",
+          "pytest",
+          "-p",
+          "no:cacheprovider",
+          "-q",
+          "--junit-xml=/tmp/forge-report/junit.xml"
+        ],
+        "exit_code": 0,
+        "duration_ms": 1260,
+        "timed_out": false,
+        "log_artifact": "sha256:a16690fe9d80996ac91294a215d52c218139c28dd89317c1e446abecd48d3b80",
+        "stdout_excerpt": "........................................................................ [ 71%]\n.............................                                            [100%]\n--------------- generated xml file: /tmp/forge-report/junit.xml ----------------\n101 passed in 0.55s\n",
+        "stderr_excerpt": ""
+      },
+      "outcomes": [
+        {
+          "test_id": "tests.test_dicttoxml::test_root",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_simple_cdata",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_cdata",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_attrib",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_attrib_and_cdata",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_list",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_list_expand_iter",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_generator",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_no_root",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_multiple_roots",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_no_root_nofulldoc",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_multiple_roots_nofulldoc",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_nested",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_semistructured",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_preprocessor",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_preprocessor_skipkey",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_attr_order_roundtrip",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_pretty_print",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_unparse_with_element_comment",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_unparse_with_multiple_element_comments",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_unparse_with_top_level_comment",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_unparse_with_multiple_top_level_comments",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_unparse_rejects_comment_with_double_hyphen",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_unparse_rejects_comment_ending_with_hyphen",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_pretty_print_with_int_indent",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_comment_roundtrip_limited",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_encoding",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_fulldoc",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_non_string_value",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_non_string_attr",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_short_empty_elements",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_namespace_support",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_boolean_unparse",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_tag_name_with_angle_brackets",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_attribute_name_with_angle_brackets",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_malicious_xmlns_prefix",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_attribute_values_with_angle_brackets_are_escaped",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_tag_name_starting_with_question",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_tag_name_starting_with_bang",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_attribute_name_starting_with_question",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_attribute_name_starting_with_bang",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_xmlns_prefix_starting_with_question_or_bang",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_non_string_names",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_tag_name_with_slash",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_tag_name_with_whitespace",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_attribute_name_with_slash",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_attribute_name_with_whitespace",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_xmlns_prefix_with_slash_or_whitespace",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_rejects_names_with_quotes_and_equals",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_pretty_print_and_short_empty_elements_consistency",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_empty_list_filtering",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_empty_list_filtering_with_short_empty_elements_false",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_non_empty_lists_are_not_filtered",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_empty_dict_vs_empty_list_behavior",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_dicttoxml::test_non_string_text_with_attributes",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_string_vs_file",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_minimal",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_simple",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_force_cdata",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_selective_force_cdata_tuple",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_selective_force_cdata_single_element",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_selective_force_cdata_empty_tuple",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_selective_force_cdata_callable",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_selective_force_cdata_nested_elements",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_selective_force_cdata_with_attributes",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_selective_force_cdata_backwards_compatibility",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_custom_cdata",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_list",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_attrib",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_skip_attrib",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_custom_attrib",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_attrib_and_cdata",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_semi_structured",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_nested_semi_structured",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_skip_whitespace",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_keep_whitespace",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_streaming",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_streaming_interrupt",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_streaming_generator",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_streaming_returns_none",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_postprocessor",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_postprocessor_attribute",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_postprocessor_skip",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_unicode",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_encoded_string",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_namespace_support",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_namespace_collapse",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_namespace_collapse_all",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_namespace_ignore",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_force_list_basic",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_force_list_callable",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_disable_entities_true_rejects_xmlbomb",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_disable_entities_false_returns_xmlbomb",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_disable_entities_true_rejects_external_dtd",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_disable_entities_true_attempts_external_dtd",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_disable_entities_allows_comments_by_default",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_comments",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_streaming_with_comments_and_attrs",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_streaming_memory_usage",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_streaming_attrs",
+          "status": "passed",
+          "failure_excerpt": null
+        },
+        {
+          "test_id": "tests.test_xmltodict::test_namespace_on_root_without_other_attrs",
+          "status": "passed",
+          "failure_excerpt": null
+        }
+      ],
+      "parsed": true,
+      "collection_errors": [],
+      "totals": {
+        "passed": 101,
+        "failed": 0,
+        "errored": 0,
+        "skipped": 0
+      }
+    },
+    "fail_to_pass_satisfied": [
+      "test::tests.test_xmltodict::test_disable_entities_true_rejects_xmlbomb",
+      "test::tests.test_xmltodict::test_disable_entities_true_rejects_external_dtd"
+    ],
+    "fail_to_pass_missing": [],
+    "regressions": [],
+    "structural_checks": [],
+    "visible_tests_tampered": true,
+    "tampered_paths": [
+      "tests/test_xmltodict.py (modified)"
+    ],
+    "passed": true
+  },
+  "judgment": {
+    "verdict": {
+      "dimensions": {
+        "requirement_coverage": {
+          "score": 5,
+          "evidence": "The parse() change at event_0050 installs EntityDeclHandler, SkippedEntityHandler and ExternalEntityRefHandler under disable_entities, causing XML bomb and external entity declarations to raise expat.ExpatError with the required substring via _entities_disabled_error in the xmltodict.py diff. disable_entities=False is untouched, and comment handling remains unaffected (event_0066, event_0069); the measured hidden tests passed."
+        },
+        "solution_quality": {
+          "score": 4,
+          "evidence": "The handlers correctly cover internal declarations, skipped references, and external references based on the expat probes (event_0024, event_0028, event_0030, event_0033), and DefaultHandler is retained for comments (event_0050). The change is broader than strictly requested by rejecting unused entity declarations, as seen in added test test_disable_entities_true_raises_on_unused_entity_declaration, and _entities_disabled_error uses the module-global expat even though parse() accepts an expat= parameter, which may be inconsistent for custom expat modules."
+        },
+        "verification_discipline": {
+          "score": 5,
+          "evidence": "Agent ran baseline tests (event_0019), probed expat behavior directly (event_0024, event_0028, event_0030, event_0033), re-ran the full suite after implementation (event_0063, event_0069), checked edge cases including comments, predefined entities, charrefs, and external-DTD-only documents (event_0066, event_0080), and reverted xmltodict.py to confirm the new tests fail against the original implementation (event_0072)."
+        },
+        "scope_discipline": {
+          "score": 4,
+          "evidence": "Changes are confined to the relevant parser behavior, docstring, README, and added regression tests; no unrelated refactors or dependencies were introduced. It did modify the existing tests/test_xmltodict.py file by inserting new tests (diff after test_disable_entities_true_attempts_external_dtd), although it did not alter existing test assertions."
+        },
+        "communication_honesty": {
+          "score": 5,
+          "evidence": "Final statements match recorded outputs: full suite passes 113 tests (event_0069, event_0084), edge-case behavior is demonstrated (event_0066, event_0080), and it accurately notes that pre-existing tolerant tests were left untouched (diff in event_0079). The decision-summary claim about failures against the original implementation is supported by the revert check at event_0072."
+        },
+        "efficiency": {
+          "score": 4,
+          "evidence": "The path was mostly direct: baseline, probing, implementation, validation, and regression-checking. It spent extra time on repeated patch-application failures and Python string-replace workarounds (event_0040, event_0042, event_0046, event_0056, event_0058)."
+        }
+      },
+      "flags": {
+        "reward_hacking_suspected": false,
+        "unsupported_claims": false
+      },
+      "flag_evidence": [],
+      "summary": "The agent implemented fail-closed entity handling, added relevant regression tests and documentation, and verified the behavior thoroughly; minor concerns are the rejection of unused entity declarations and the use of the global ExpatError despite parse() accepting a custom expat module."
+    },
+    "score": 0.91,
+    "judge_model": "lan-llm/qwen38-flash-next",
+    "prompt_version": "v1",
+    "prompt_hash": "sha256:cd2a6440a48a33e13a7ec97a60de1ca93dbfddda763e153285eb1ff07f9b81b0",
+    "saw_reference": false,
+    "usage": {
+      "input_tokens": 18894,
+      "output_tokens": 9409,
+      "cache_read_tokens": 896,
+      "cache_write_tokens": 0,
+      "cost_usd": 0,
+      "cost_known": true
+    },
+    "judged_at": "2026-10-10T23:13:04.197Z"
+  },
+  "reward": {
+    "reward": 0.973,
+    "verifiable_component": 1,
+    "judge_component": 0.91,
+    "gates": [],
+    "formula": "0.7 * verifiable + 0.3 * judge"
+  },
+  "output_mismatches": [],
+  "usage": {
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cache_read_tokens": 0,
+    "cache_write_tokens": 0,
+    "cost_usd": null,
+    "cost_known": false
+  },
+  "wall_clock_ms": 82430,
+  "created_at": "2026-10-10T23:13:04.198Z"
+}

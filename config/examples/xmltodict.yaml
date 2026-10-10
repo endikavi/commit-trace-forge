@@ -1,0 +1,75 @@
+# Example: martinblech/xmltodict
+#
+# The smallest real-world starting point: one pure-Python module, a pytest suite that runs in
+# seconds, a setuptools build with a static version and no runtime dependencies. Its history is
+# rich in small, well-tested fixes to parsing and unparsing edge cases — good material for
+# bugfix tasks a model has to reason about rather than pattern-match.
+#
+#   pnpm forge doctor --config config/examples/xmltodict.yaml
+#   pnpm forge run    --config config/examples/xmltodict.yaml
+#
+# Host-specific settings come from the environment, not from this file:
+#   FORGE_MODEL="anthropic/claude-sonnet-4-5"           any pi provider/model
+#   FORGE_DOCKER_COMMAND="wsl -d Ubuntu -e docker"      Windows with docker inside WSL
+
+schema_version: 1
+seed: 7
+workspace: ../../.forge-examples/xmltodict
+
+repositories:
+  - url: https://github.com/martinblech/xmltodict
+    # Pinned so every run sees the same history. Move it forward deliberately.
+    ref: 6e29fba282e68631034dd2722a413b4e35276584
+    family: xmltodict
+    ecosystem: python
+    license: MIT
+
+sampling:
+  target_samples: 5
+  max_candidates: 40
+
+filters:
+  changed_lines: { min: 8, max: 200 }
+  changed_files: { min: 2, max: 6 }
+  # Recent history builds with current setuptools on Python 3.12; older revisions often do not.
+  since: "2023-01-01T00:00:00Z"
+  exclude_path_globs: ["*.md", "docs/**", ".github/**"]
+
+grading:
+  min_score: 65
+
+generation:
+  max_solver_attempts: 2
+  max_user_questions: 2
+  max_agent_turns: 40
+
+verification:
+  acceptance_mode: either
+  replay_required: true
+  clean_runs: 2
+
+sandbox:
+  memory_mb: 2048
+  task_timeout_seconds: 900
+  command_timeout_seconds: 180
+
+model:
+  provider: anthropic
+  model: claude-sonnet-4-5
+  thinking: "off"
+
+budgets:
+  max_total_tokens: 3000000
+  max_total_cost_usd: 20
+  max_parallel_tasks: 2
+  max_prepared_candidates: 15
+
+export:
+  formats: [jsonl, conversations, openai_chat, rl_tasks]
+
+cleanup:
+  # Kept so `forge rollout` and `forge score` can start immediately after the run.
+  task_images: never
+
+rl:
+  rollouts_per_task: 4
